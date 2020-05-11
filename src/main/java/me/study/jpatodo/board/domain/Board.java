@@ -3,6 +3,7 @@ package me.study.jpatodo.board.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import me.study.jpatodo.subject.domain.Subject;
 
 import javax.persistence.Entity;
