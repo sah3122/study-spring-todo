@@ -2,23 +2,39 @@ package me.study.jpatodo.board.api;
 
 import lombok.RequiredArgsConstructor;
 import me.study.jpatodo.board.application.BoardService;
-import me.study.jpatodo.board.dto.BoardCreateRequest;
-import me.study.jpatodo.board.dto.BoardCreateResponse;
+import me.study.jpatodo.board.dto.BoardRequest.CreateRequest;
+import me.study.jpatodo.board.dto.BoardResponse.BoardDto;
+import me.study.jpatodo.board.dto.BoardResponse.CreateResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
 @RequiredArgsConstructor
 public class BoardController {
+    private static final String BOARD_URI = "/board";
     private final BoardService boardService;
 
-    @PostMapping("/board")
-    public ResponseEntity<BoardCreateResponse> create(BoardCreateRequest boardCreateRequest) {
-        BoardCreateResponse boardCreateResponse = boardService.create(boardCreateRequest);
-        return ResponseEntity.created(URI.create("/card/" + boardCreateResponse.getId()))
-                .body(boardCreateResponse);
+    @PostMapping(BOARD_URI)
+    public ResponseEntity<CreateResponse> create(@RequestBody CreateRequest createRequest) {
+        CreateResponse createResponse = boardService.create(createRequest);
+        URI createdUri = linkTo(BoardController.class).slash(createResponse.getId()).withSelfRel().toUri();
+        return ResponseEntity.created(createdUri)
+                .body(createResponse);
+    }
+
+    @GetMapping(BOARD_URI)
+    public ResponseEntity<Page<BoardDto>> findAll(Pageable pageable) {
+        Page<BoardDto> boardDtos = boardService.findAll(pageable);
+        return ResponseEntity.ok(boardDtos);
     }
 }
