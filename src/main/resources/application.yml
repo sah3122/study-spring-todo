@@ -14,3 +14,6 @@ logging:
         type:
           descriptor:
             sql: trace
+app:
+  client-id: myApp
+  client-secret: pass

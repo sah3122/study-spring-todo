@@ -41,11 +41,13 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
+    compile group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    compile 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure'
 }
 
 test {
@@ -75,4 +77,14 @@ configurations {
 
 compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
+}
+
+ext {
+    set('springCloudVersion', "Hoxton.SR3")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }
