@@ -1,15 +1,23 @@
 package me.study.jpatodo.board.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.study.jpatodo.board.application.BoardService;
 import me.study.jpatodo.board.dto.BoardRequest;
+import me.study.jpatodo.board.dto.BoardRequest.CreateRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -18,25 +26,40 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class BoardControllerTest {
+@AutoConfigureRestDocs
+@ExtendWith(RestDocumentationExtension.class)
+class BoardApiControllerTest {
     @Autowired
     MockMvc mockMvc;
 
     @Autowired
     BoardService boardService;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     @DisplayName("보드 생성")
     @Test
     void createBoard() throws Exception {
-        mockMvc.perform(post(BoardController.BOARD_URI).param("title", "board1"))
+        String title = "board1";
+        CreateRequest createRequest = new CreateRequest();
+        createRequest.setTitle(title);
+
+        mockMvc.perform(post(BoardApiController.BOARD_URI)
+                    .content(objectMapper.writeValueAsString(createRequest))
+                    .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andDo(document("create-board",
+                        requestFields(
+                                fieldWithPath("title").description("제목")
+                        )));
     }
 
     @DisplayName("보드 조회 - 전체")
     @Test
     void findBoardAll() throws Exception {
-        mockMvc.perform(get(BoardController.BOARD_URI)
+        mockMvc.perform(get(BoardApiController.BOARD_URI)
                 .param("offset", "0")
                 .param("pageSize", "10"))
                 .andDo(print())
@@ -46,11 +69,11 @@ class BoardControllerTest {
     @DisplayName("보드 조회 - 단건")
     @Test
     void findBoard() throws Exception {
-        BoardRequest.CreateRequest createRequest = new BoardRequest.CreateRequest();
+        CreateRequest createRequest = new CreateRequest();
         createRequest.setTitle("title");
         boardService.create(createRequest);
 
-        mockMvc.perform(get(BoardController.BOARD_URI + "/1"))
+        mockMvc.perform(get(BoardApiController.BOARD_URI + "/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("title").exists());
@@ -59,7 +82,7 @@ class BoardControllerTest {
     @DisplayName("보드 조회 - 단건 - 정보가 존재하지 않을시 에러")
     @Test
     void findBoardFail() throws Exception {
-        mockMvc.perform(get(BoardController.BOARD_URI + "/0"))
+        mockMvc.perform(get(BoardApiController.BOARD_URI + "/0"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
