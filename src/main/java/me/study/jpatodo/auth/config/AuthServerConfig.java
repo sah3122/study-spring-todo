@@ -34,7 +34,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
                 .withClient(appProperties.getClientId()) // Client Id
                 .authorizedGrantTypes("password", "refresh_token")//refresh_token을 받기위해
                 .scopes("read", "write")
-                .secret(this.passwordEncoder.encode(appProperties.getClientSecret())) // app secret
+                .secret(passwordEncoder.encode(appProperties.getClientSecret())) // app secret
                 .accessTokenValiditySeconds(10 * 60)
                 .refreshTokenValiditySeconds(6 * 10 * 60);
     }

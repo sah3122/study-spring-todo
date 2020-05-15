@@ -21,6 +21,7 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public AccountCreateResponse saveAccount(AccountCreateRequest accountCreateRequest) {
         Account account = accountCreateRequest.toEntity();
         account.encodePassword(passwordEncoder);
