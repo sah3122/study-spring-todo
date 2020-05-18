@@ -25,7 +25,8 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        security.passwordEncoder(passwordEncoder); // Secret 설정시 인코딩 해서 관리.
+        security.checkTokenAccess("permitAll()")
+                .passwordEncoder(passwordEncoder); // Secret 설정시 인코딩 해서 관리.
     }
 
     @Override
@@ -35,8 +36,8 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
                 .authorizedGrantTypes("password", "refresh_token")//refresh_token을 받기위해
                 .scopes("read", "write")
                 .secret(passwordEncoder.encode(appProperties.getClientSecret())) // app secret
-                .accessTokenValiditySeconds(10 * 60)
-                .refreshTokenValiditySeconds(6 * 10 * 60);
+                .accessTokenValiditySeconds(10 * 60 * 6)
+                .refreshTokenValiditySeconds(6 * 10 * 60 * 24);
     }
 
     @Override

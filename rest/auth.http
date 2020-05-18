@@ -1,0 +1,21 @@
+POST http://localhost:8080/sign-up
+Content-Type: application/json
+
+{
+  "nickname" : "dong1",
+  "email" : "dong1@gmail.com",
+  "password" : "password"
+}
+
+###
+POST http://localhost:8080/oauth/token?username=dong1@gmail.com&password=password&grant_type=password
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic bXlBcHA6cGFzcw==
+
+###
+
+POST http://localhost:8080/oauth/check_token?token=6aed292e-566b-492a-a5ce-8b3a45698d1a
+Content-Type: application/x-www-form-urlencoded
+
+
+###
