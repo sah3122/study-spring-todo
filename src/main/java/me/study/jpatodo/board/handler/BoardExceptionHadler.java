@@ -1,6 +1,7 @@
 package me.study.jpatodo.board.handler;
 
 import lombok.extern.slf4j.Slf4j;
+import me.study.jpatodo.board.domain.error.BoardMissingParameterException;
 import me.study.jpatodo.board.domain.error.BoardNotFoundException;
 import me.study.jpatodo.common.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -16,5 +17,12 @@ public class BoardExceptionHadler {
         log.error(exception.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(exception.getTitle(), exception.getMessage()));
+    }
+
+    @ExceptionHandler(BoardMissingParameterException.class)
+    public ResponseEntity<ErrorResponse> boardMissingParameterException(BoardMissingParameterException exception) {
+        log.error(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(exception.getMessage()));
     }
 }

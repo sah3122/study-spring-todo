@@ -14,7 +14,7 @@ Authorization: Basic bXlBcHA6cGFzcw==
 
 ###
 
-POST http://localhost:8080/oauth/check_token?token=6aed292e-566b-492a-a5ce-8b3a45698d1a
+POST http://localhost:8080/oauth/check_token?token=d67c3147-77b6-4160-b12b-d3470f0543dd
 Content-Type: application/x-www-form-urlencoded
 
 

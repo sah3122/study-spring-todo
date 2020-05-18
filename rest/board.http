@@ -1,10 +1,26 @@
 GET http://localhost:8080/board
 Accept: application/json
+Authorization: Bearer 1defaa25-b404-42dd-b4c2-ac645a9e5d4f
+###
+
+GET http://localhost:8080/board/2
+Accept: application/json
 
 ###
 
 POST http://localhost:8080/board
 Content-Type: application/json
+Authorization: Bearer 2d01c97f-a832-4e3e-a992-409ad4e7bd28
+
+{
+  "title" : "title"
+}
+
+###
+
+PUT http://localhost:8080/board/1
+Content-Type: application/json
+Authorization: Bearer d67c3147-77b6-4160-b12b-d3470f0543dd
 
 {
   "title" : "title"
