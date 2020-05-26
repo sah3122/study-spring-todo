@@ -33,8 +33,9 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory() // jdbc를 사용해 db에서 관리하는게 이상적이다.
                 .withClient(appProperties.getClientId()) // Client Id
-                .authorizedGrantTypes("password", "refresh_token")//refresh_token을 받기위해
+                .authorizedGrantTypes("password", "refresh_token", "authorization_code")//refresh_token을 받기위해
                 .scopes("read", "write")
+                .redirectUris(appProperties.getRedirectUri())
                 .secret(passwordEncoder.encode(appProperties.getClientSecret())) // app secret
                 .accessTokenValiditySeconds(10 * 60 * 6)
                 .refreshTokenValiditySeconds(6 * 10 * 60 * 24);

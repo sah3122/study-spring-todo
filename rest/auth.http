@@ -1,3 +1,4 @@
+### Sign In
 POST http://localhost:8080/sign-up
 Content-Type: application/json
 
@@ -7,15 +8,25 @@ Content-Type: application/json
   "password" : "password"
 }
 
-###
+### Resource Owner Password Credentials Grant
 POST http://localhost:8080/oauth/token?username=dong1@gmail.com&password=password&grant_type=password
 Content-Type: application/x-www-form-urlencoded
 Authorization: Basic bXlBcHA6cGFzcw==
 
-###
-
-POST http://localhost:8080/oauth/check_token?token=d67c3147-77b6-4160-b12b-d3470f0543dd
+### Check Token
+POST http://localhost:8080/oauth/check_token?token=ce54e5d4-b15a-420e-b7c0-9dc3107830f1
 Content-Type: application/x-www-form-urlencoded
 
+
+### Refresh Token
+POST http://localhost:8080/oauth/token?grant_type=refresh_token&scope=read write&refresh_token=5234fd42-2ff8-43c8-9919-47f89740907b
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic bXlBcHA6cGFzcw==
+
+
+### Authorization Code Grant Type
+POST http://localhost:8080/oauth/token?grant_type=authorization_code&code=ITgcDV&redirect_uri=http://localhost:8081&scope=read write
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic bXlBcHA6cGFzcw==
 
 ###
