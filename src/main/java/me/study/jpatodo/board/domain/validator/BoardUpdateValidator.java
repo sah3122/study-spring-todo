@@ -27,6 +27,8 @@ public class BoardUpdateValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
+        UpdateRequest updateRequest = (UpdateRequest) target;
+        updateRequest.getId();
         if (errors.hasErrors()) {
             ObjectError objectError = errors.getAllErrors().stream()
                     .findFirst()

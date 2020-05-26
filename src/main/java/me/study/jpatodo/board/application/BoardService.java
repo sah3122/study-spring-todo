@@ -6,11 +6,13 @@ import me.study.jpatodo.board.domain.BoardRepository;
 import me.study.jpatodo.board.domain.error.BoardNotFoundException;
 import me.study.jpatodo.board.dto.BoardRequest;
 import me.study.jpatodo.board.dto.BoardRequest.CreateRequest;
+import me.study.jpatodo.board.dto.BoardRequest.UpdateRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,5 +39,11 @@ public class BoardService {
         Board findBoard = boardRepository.findById(id)
                 .orElseThrow(() -> new BoardNotFoundException("BoardNotFound" , "보드 조회 실패", "정보가 없습니다." + id));
         return new BoardDto(findBoard);
+    }
+
+    @Transactional
+    public void changeBoard(UpdateRequest updateRequest) {
+        Board board = updateRequest.toEntity();
+        boardRepository.save(board);
     }
 }
