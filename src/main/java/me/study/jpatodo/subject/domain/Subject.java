@@ -1,11 +1,11 @@
 package me.study.jpatodo.subject.domain;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.study.jpatodo.board.domain.Board;
 import me.study.jpatodo.card.domain.Card;
-import me.study.jpatodo.common.entity.BaseEntity;
+import me.study.jpatodo.common.entity.BaseTimeEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,8 +14,8 @@ import java.util.List;
 @Entity
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
-public class Subject extends BaseEntity {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Subject extends BaseTimeEntity {
     @Id
     @GeneratedValue
     @Column(name = "subject_id")
@@ -23,11 +23,8 @@ public class Subject extends BaseEntity {
     private String title;
     @OneToMany(mappedBy = "subject")
     private List<Card> cards = new ArrayList<>();
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Board board;
 
-    public Subject(String title, Board board) {
+    public Subject(String title) {
         this.title = title;
-        this.board = board;
     }
 }
